@@ -1,0 +1,181 @@
+
+import java.util.Scanner;
+
+public class PalindromeCheck {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter a string: ");
+        String input = scanner.nextLine();
+        String reversed = new StringBuilder(input).reverse().toString();
+        
+        if (input.equals(reversed)) {
+            System.out.println("It is palindrome");
+        } else {
+            System.out.println("It is not palindrome");
+        }
+    }
+}
+
+
+import java.util.Scanner;
+import java.util.regex.Pattern;
+
+public class EmailValidation {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter an email: ");
+        String email = scanner.nextLine();
+        
+        String regex = "^[a-zA-Z0-9._%+-]+@(umt\\.edu|gmail)\\.com$";
+        Pattern pattern = Pattern.compile(regex);
+        
+        if (pattern.matcher(email).matches()) {
+            System.out.println(email + " valid");
+        } else {
+            System.out.println(email + " invalid");
+        }
+    }
+}
+
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+public class DateFormat {
+    public static void main(String[] args) {
+        LocalDate date = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String formattedDate = date.format(formatter);
+        
+        System.out.println(formattedDate);
+    }
+}
+
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
+
+public class AddDaysToDate {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter a date (yyyy-MM-dd): ");
+        String dateInput = scanner.nextLine();
+        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(dateInput, formatter);
+        LocalDate newDate = date.plusDays(30);
+        
+        System.out.println(newDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+    }
+}
+
+
+import java.util.Scanner;
+
+public class NumberToRoman {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter a number: ");
+        int number = scanner.nextInt();
+        
+        System.out.println("Roman numeral: " + intToRoman(number));
+    }
+    
+    public static String intToRoman(int num) {
+        String[] thousands = {"", "M", "MM", "MMM"};
+        String[] hundreds = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
+        String[] tens = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
+        String[] units = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
+        
+        return thousands[num / 1000] + 
+               hundreds[(num % 1000) / 100] + 
+               tens[(num % 100) / 10] + 
+               units[num % 10];
+    }
+}
+
+
+import java.util.Stack;
+
+public class ValidParentheses {
+    public static void main(String[] args) {
+        String s1 = "()";
+        String s2 = "()[]{}";
+        String s3 = "(]";
+        
+        System.out.println(isValid(s1)); // true
+        System.out.println(isValid(s2)); // true
+        System.out.println(isValid(s3)); // false
+    }
+    
+    public static boolean isValid(String s) {
+        Stack<Character> stack = new Stack<>();
+        for (char c : s.toCharArray()) {
+            if (c == '(') stack.push(')');
+            else if (c == '{') stack.push('}');
+            else if (c == '[') stack.push(']');
+            else if (stack.isEmpty() || stack.pop() != c) return false;
+        }
+        return stack.isEmpty();
+    }
+}
+
+
+public class LongestCommonPrefix {
+    public static void main(String[] args) {
+        String[] strs1 = {"flower", "flow", "flight"};
+        String[] strs2 = {"dog", "racecar", "car"};
+        
+        System.out.println(longestCommonPrefix(strs1)); // fl
+        System.out.println(longestCommonPrefix(strs2)); // (empty string)
+    }
+    
+    public static String longestCommonPrefix(String[] strs) {
+        if (strs == null || strs.length == 0) return "";
+        String prefix = strs[0];
+        for (int i = 1; i < strs.length; i++) {
+            while (strs[i].indexOf(prefix) != 0) {
+                prefix = prefix.substring(0, prefix.length() - 1);
+                if (prefix.isEmpty()) return "";
+            }
+        }
+        return prefix;
+    }
+}
+
+
+import java.util.Stack;
+
+public class RemoveDuplicateLetters {
+    public static void main(String[] args) {
+        String s1 = "bcabc";
+        String s2 = "cbacdcbc";
+        
+        System.out.println(removeDuplicateLetters(s1)); // abc
+        System.out.println(removeDuplicateLetters(s2)); // acdb
+    }
+    
+    public static String removeDuplicateLetters(String s) {
+        int[] count = new int[26];
+        boolean[] visited = new boolean[26];
+        char[] chars = s.toCharArray();
+        
+        for (char c : chars) count[c - 'a']++;
+        
+        Stack<Character> stack = new Stack<>();
+        for (char c : chars) {
+            count[c - 'a']--;
+            if (visited[c - 'a']) continue;
+            while (!stack.isEmpty() && c < stack.peek() && count[stack.peek() - 'a'] > 0) {
+                visited[stack.pop() - 'a'] = false;
+            }
+            stack.push(c);
+            visited[c - 'a'] = true;
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        for (char c : stack) sb.append(c);
+        return sb.toString();
+    }
+}
